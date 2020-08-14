@@ -8,12 +8,12 @@ spring:
         network-interface: en0
         namespace: 6b7ab97d-362f-4e6d-a949-aa289a278a57
         metadata:
-          user.name: admin
-          user.password: 123456
+          user.name: javascm
+          user.password: 'javascm@2020'
   security:
     user:
-      name: admin
-      password: 123456
+      name: javascm
+      password: 'javascm@2020'
   boot:
     admin:
       notify:
@@ -30,7 +30,7 @@ spring:
     default-encoding: UTF-8
     properties:
       mail:
-        debug: true
+        debug: false
         smtp:
           auth: true
           connectiontimeout: 10000

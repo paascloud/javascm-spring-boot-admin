@@ -3,7 +3,7 @@ spring:
     name: javascm-spring-boot-admin
 
 log:
-  level: info
+  level: error
   dateFormat: yyyy-MM-dd
   console-out: true
   max-history: 0
