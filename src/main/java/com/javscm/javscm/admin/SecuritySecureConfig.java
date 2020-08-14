@@ -32,6 +32,7 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(adminContextPath + "/assets/**").permitAll()
                 //登录页面允许访问
                 .antMatchers(adminContextPath + "/login","/css/**","/js/**","/image/*").permitAll()
+                .antMatchers(adminContextPath + "/health/check/").permitAll()
                 //其他所有请求需要登录
                 .anyRequest().authenticated()
                 .and()
