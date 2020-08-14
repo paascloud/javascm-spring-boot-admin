@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    ​
+    <contextName>javascm-spring-boot-admin</contextName>
+    <property name="queue.size" value="1024"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <springProperty scope="context" name="dateFormat" source="log.dateFormat"/>
+    <springProperty scope="context" name="max.history" source="log.max-history"/>
+    <springProperty scope="context" name="never.block" source="log.never-block"/>
+    <springProperty scope="context" name="discarding.threshold" source="log.discarding-threshold"/>
+    <springProperty scope="context" name="console.out" source="log.console-out"/>
+    <springProperty scope="context" name="show.sql.mybatis.mapper.path" source="log.show-sql-mybatis-mapper-path"/>
+
+    <!-- Example for logging into the build folder of your project -->
+    <property name="LOG_FILE" value="/data/logs/${springAppName}/${springAppName}"/>​
+
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- Appender to log to console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- debug 日志-->
+    <appender name="DEBUG-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log.debug</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.log.debug.%d{${dateFormat}}</fileNamePattern>
+            <MaxHistory>${max.history}</MaxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC-DEBUG-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>${discarding.threshold}</discardingThreshold>
+        <queueSize>${queue.size}</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>${never.block}</neverBlock>
+        <appender-ref ref="DEBUG-APPENDER"/>
+    </appender>
+
+    <!-- info 日志-->
+    <appender name="INFO-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log.info</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.log.info.%d{${dateFormat}}</fileNamePattern>
+            <MaxHistory>${max.history}</MaxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>　　　　
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC-INFO-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>${discarding.threshold}</discardingThreshold>
+        <queueSize>${queue.size}</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>${never.block}</neverBlock>
+        <appender-ref ref="INFO-APPENDER"/>
+    </appender>
+
+    <!-- wf 日志 -->
+    <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log.wf</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.log.wf.%d{${dateFormat}}</fileNamePattern>
+            <MaxHistory>${max.history}</MaxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC-ERROR-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>${discarding.threshold}</discardingThreshold>
+        <queueSize>${queue.size}</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>${never.block}</neverBlock>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </appender>
+
+    <if condition='isNull("show.sql.mybatis.mapper.path")'>
+        <then>
+        </then>
+        <else>
+            <logger name="com.ibatis" level="DEBUG" />
+            <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+            <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />
+            <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />
+            <logger name="java.sql.Connection" level="DEBUG" />
+            <logger name="java.sql.Statement" level="DEBUG" />
+            <logger name="java.sql.PreparedStatement" level="DEBUG" />
+            <logger name="${show.sql.mybatis.mapper.path}" level="DEBUG"/>
+        </else>
+    </if>
+
+    <!-- Appender to log to file -->​
+    <appender name="FLATFILE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC-FLATFILE-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>${discarding.threshold}</discardingThreshold>
+        <queueSize>${queue.size}</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>${never.block}</neverBlock>
+        <appender-ref ref="FLATFILE-APPENDER"/>
+    </appender>
+    ​
+    <!-- Appender to log to file in a JSON format -->
+    <appender name="LOGSTASH-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.log.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${springAppName:-}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "userId": "%X{userId:-}",
+                        "parent": "%X{X-B3-ParentSpanId:-}",
+                        "exportable": "%X{X-Span-Export:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "rest": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC-LOGSTASH-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>${discarding.threshold}</discardingThreshold>
+        <queueSize>${queue.size}</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <neverBlock>${never.block}</neverBlock>
+        <appender-ref ref="LOGSTASH-APPENDER"/>
+    </appender>
+
+    <logger name="java.sql.Connection" level="DEBUG" />
+    <logger name="java.sql.PreparedStatement" level="DEBUG" />
+    <logger name="java.sql.ResultSet" level="DEBUG" />
+
+
+    <root level="${log.level:-INFO}">
+        <appender-ref ref="ASYNC-LOGSTASH-APPENDER" />
+        <appender-ref ref="ASYNC-FLATFILE-APPENDER" />
+        <appender-ref ref="ASYNC-ERROR-APPENDER" />
+        <appender-ref ref="ASYNC-INFO-APPENDER" />
+        <appender-ref ref="ASYNC-DEBUG-APPENDER" />
+        <if condition='property("console.out").contains("true")'>
+            <then>
+                <appender-ref ref="console" />
+            </then>
+        </if>
+    </root>
+</configuration>

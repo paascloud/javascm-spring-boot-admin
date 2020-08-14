@@ -1,0 +1,27 @@
+server:
+  port: 8002
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: javascm-spring-boot-admin
+  main:
+    allow-bean-definition-overriding: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    logfile:
+      external-file: /data/logs/javascm-spring-boot-admin/javascm-spring-boot-admin.log.json
+    health:
+      show-details: always
+#
+#logging:
+#  file: '/data/logs/javascm-spring-boot-admin/javascm-spring-boot-admin.log.info'
+#  pattern:
+#    file: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'

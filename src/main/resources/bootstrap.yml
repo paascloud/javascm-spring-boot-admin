@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: javascm-spring-boot-admin
+
+log:
+  level: info
+  dateFormat: yyyy-MM-dd
+  console-out: true
+  max-history: 0
+  show-sql-mybatis-mapper-path: com.javascm.tpc.domain.repository
+  never-block: true
+  discarding-threshold: 20

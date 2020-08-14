@@ -1,0 +1,44 @@
+spring:
+  cloud:
+    inetutils:
+      ignored-interfaces: lo0
+    nacos:
+      discovery:
+        server-addr: 39.105.66.78:8848
+        network-interface: en0
+        namespace: 6b7ab97d-362f-4e6d-a949-aa289a278a57
+        metadata:
+          user.name: admin
+          user.password: 123456
+  security:
+    user:
+      name: admin
+      password: 123456
+  boot:
+    admin:
+      notify:
+        mail:
+          to: 'paascloud.net@gmail.com'
+          from: ${spring.mail.username}
+  mail:
+    host: smtp.163.com
+    username: javascm@163.com
+    password: OYSRQGEVYEYUTMTC
+    port: 465
+    protocol: smtp
+    test-connection: false
+    default-encoding: UTF-8
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
+          starttls:
+            enable: true
+            required: true
